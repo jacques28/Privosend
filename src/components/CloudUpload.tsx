@@ -29,8 +29,8 @@ export default function CloudUpload() {
 
             setStatus('uploading')
 
-            // 3. Generate unique code and path
-            const code = Math.random().toString(36).substring(2, 8).toUpperCase()
+            // 3. Generate unique 6-digit code
+            const code = Math.floor(100000 + Math.random() * 900000).toString()
             const filePath = `${code}/${file.name}.enc`
 
             // 4. Upload to Supabase Storage
@@ -51,14 +51,12 @@ export default function CloudUpload() {
                     file_path: filePath,
                     expires_at: expiresAt,
                     encryption_iv: ivBase64,
+                    encryption_key: exportedKey, // Store key for code-based access
                 })
 
             if (dbError) throw dbError
 
-            // 6. Generate Share Link (including the key in the hash fragment so it's not sent to server)
-            // Format: /download?code=CODE#key=KEY
-            const link = `${window.location.origin}/download?code=${code}#key=${encodeURIComponent(exportedKey)}`
-            setShareLink(link)
+            setShareLink(code) // Reusing shareLink state to store the code
             setStatus('completed')
 
         } catch (err: any) {
@@ -129,23 +127,18 @@ export default function CloudUpload() {
                             <Check className="w-6 h-6" />
                         </div>
                         <h3 className="text-lg font-medium">File Uploaded!</h3>
-                        <p className="text-sm text-zinc-500">Share this link to allow download.</p>
+                        <p className="text-sm text-zinc-500">Share this code with the recipient.</p>
                     </div>
 
-                    <div className="flex items-center gap-2 p-2 bg-zinc-50 dark:bg-zinc-800 rounded border border-zinc-200 dark:border-zinc-700">
-                        <input
-                            type="text"
-                            value={shareLink}
-                            readOnly
-                            className="flex-1 bg-transparent text-sm outline-none"
-                        />
-                        <button onClick={copyLink} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded transition-colors">
-                            {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-zinc-500" />}
+                    <div className="flex items-center justify-center gap-2">
+                        <div className="text-4xl font-mono font-bold tracking-wider">{shareLink}</div>
+                        <button onClick={copyLink} className="p-2 hover:bg-zinc-100 rounded-full transition-colors">
+                            {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5 text-zinc-500" />}
                         </button>
                     </div>
 
-                    <div className="text-xs text-amber-600 bg-amber-50 p-2 rounded">
-                        Note: The encryption key is in the link. Do not lose it! We do not store the key.
+                    <div className="text-xs text-amber-600 bg-amber-50 p-2 rounded text-center">
+                        Code expires in 24 hours.
                     </div>
 
                     <Button onClick={() => {
@@ -159,7 +152,7 @@ export default function CloudUpload() {
             )}
 
             <div className="mt-6 text-xs text-center text-zinc-400">
-                Files are encrypted on your device before upload. We cannot see your files.
+                Files are encrypted on your device before upload.
             </div>
         </div>
     )
