@@ -68,8 +68,12 @@ export default function P2PReceiver() {
             })
             .subscribe(async (status: string) => {
                 if (status === 'SUBSCRIBED') {
-                    // Signal presence to sender
-                    await channelRef.current?.track({})
+                    // Signal ready to sender
+                    await channelRef.current?.send({
+                        type: 'broadcast',
+                        event: 'ready',
+                        payload: {},
+                    })
                 }
             })
     }

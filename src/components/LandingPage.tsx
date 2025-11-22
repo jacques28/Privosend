@@ -14,9 +14,12 @@ import CloudUpload from "@/components/CloudUpload"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 
+import CloudReceive from "@/components/CloudReceive"
+
 export default function LandingPage() {
     const [activeMode, setActiveMode] = useState<'p2p' | 'cloud' | null>(null)
     const [p2pRole, setP2pRole] = useState<'send' | 'receive'>('send')
+    const [cloudRole, setCloudRole] = useState<'send' | 'receive'>('send')
 
     const scrollToModeSelection = () => {
         const element = document.getElementById('mode-selection')
@@ -32,6 +35,7 @@ export default function LandingPage() {
                         onClick={() => {
                             setActiveMode(null)
                             setP2pRole('send')
+                            setCloudRole('send')
                         }}
                         className="mb-8 hover:bg-zinc-200 dark:hover:bg-zinc-800"
                     >
@@ -64,7 +68,29 @@ export default function LandingPage() {
                                 {p2pRole === 'send' ? <P2PSender /> : <P2PReceiver />}
                             </div>
                         ) : (
-                            <CloudUpload />
+                            <div className="w-full max-w-md space-y-6">
+                                <div className="flex p-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                    <button
+                                        onClick={() => setCloudRole('send')}
+                                        className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${cloudRole === 'send'
+                                                ? 'bg-white dark:bg-zinc-700 shadow-sm text-zinc-900 dark:text-white'
+                                                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                                            }`}
+                                    >
+                                        Upload File
+                                    </button>
+                                    <button
+                                        onClick={() => setCloudRole('receive')}
+                                        className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${cloudRole === 'receive'
+                                                ? 'bg-white dark:bg-zinc-700 shadow-sm text-zinc-900 dark:text-white'
+                                                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                                            }`}
+                                    >
+                                        Download File
+                                    </button>
+                                </div>
+                                {cloudRole === 'send' ? <CloudUpload /> : <CloudReceive />}
+                            </div>
                         )}
                     </div>
                 </div>

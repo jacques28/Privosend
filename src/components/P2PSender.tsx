@@ -71,8 +71,8 @@ export default function P2PSender() {
                     await peerRef.current.addIceCandidate(payload)
                 }
             })
-            .on('presence', { event: 'join' }, async () => {
-                // When receiver joins, create offer
+            .on('broadcast', { event: 'ready' }, async () => {
+                // Receiver is ready, create offer
                 if (peerRef.current) {
                     const offer = await peerRef.current.createOffer()
                     await channelRef.current?.send({
@@ -84,7 +84,7 @@ export default function P2PSender() {
             })
             .subscribe(async (status: string) => {
                 if (status === 'SUBSCRIBED') {
-                    // Wait for receiver
+                    // Waiting for receiver to send 'ready'
                 }
             })
     }

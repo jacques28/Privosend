@@ -63,7 +63,11 @@ export default function CloudUpload() {
 
         } catch (err: any) {
             console.error('Upload failed:', err)
-            setError(err.message || 'Upload failed')
+            if (err.message?.includes('Bucket not found') || err.error === 'Bucket not found' || err.statusCode === '404') {
+                setError('Storage bucket not found. Please run the SQL setup script in Supabase.')
+            } else {
+                setError(err.message || 'Upload failed')
+            }
             setStatus('error')
         }
     }
