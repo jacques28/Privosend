@@ -107,8 +107,14 @@ export default function P2PReceiver() {
         const a = document.createElement('a')
         a.href = url
         a.download = fileMeta.name
+        document.body.appendChild(a) // Append to body
         a.click()
+        document.body.removeChild(a) // Remove after click
         URL.revokeObjectURL(url)
+    }
+
+    const handleManualDownload = () => {
+        saveFile()
     }
 
     return (
@@ -163,13 +169,18 @@ export default function P2PReceiver() {
                     </div>
                     <h3 className="text-lg font-medium">Download Complete!</h3>
                     <p className="text-sm text-zinc-500">File has been saved to your device.</p>
+
+                    <Button onClick={handleManualDownload} variant="secondary" className="w-full mb-2">
+                        <Download className="w-4 h-4 mr-2" /> Download Again
+                    </Button>
+
                     <Button onClick={() => {
                         setStatus('idle')
                         setRoomCode('')
                         setProgress(0)
                         setFileMeta(null)
                         receivedChunks.current = []
-                    }} variant="outline">
+                    }} variant="outline" className="w-full">
                         Receive Another
                     </Button>
                 </div>
