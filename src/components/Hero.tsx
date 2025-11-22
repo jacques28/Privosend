@@ -5,7 +5,11 @@ import { ArrowRight, Shield, Zap, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-export default function Hero() {
+interface HeroProps {
+    onStartClick?: () => void
+}
+
+export default function Hero({ onStartClick }: HeroProps) {
     return (
         <section className="relative overflow-hidden pt-32 pb-16 md:pt-48 md:pb-32">
             <div className="container px-4 md:px-6 mx-auto relative z-10">
@@ -35,11 +39,9 @@ export default function Hero() {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="flex flex-col sm:flex-row gap-4"
                     >
-                        <Link href="/upload">
-                            <Button size="lg" className="h-12 px-8 text-base">
-                                Start Sharing <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
-                        </Link>
+                        <Button size="lg" className="h-12 px-8 text-base" onClick={onStartClick}>
+                            Start Sharing <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
                         <Link href="#how-it-works">
                             <Button variant="outline" size="lg" className="h-12 px-8 text-base">
                                 Learn More
