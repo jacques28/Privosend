@@ -1,0 +1,5 @@
+# Privosend - Project Overview
+
+**Privosend** is a secure, privacy-first file sharing platform designed to give users complete control over their data through two distinct sharing modes. **P2P Direct Share** leverages WebRTC technology to enable instant, serverless file transfers directly between devices, ensuring that files never touch a cloud server. Alternatively, **Secure Cloud Drop** offers a temporary storage solution where files are encrypted client-side (AES-GCM) before upload and automatically deleted after 24 hours, accessible only via a unique 6-digit code and a decryption key that remains with the user.
+
+Built on a modern tech stack featuring **Next.js 15**, **React 19**, and **Tailwind CSS**, Privosend delivers a premium, responsive user experience. The backend is powered by **Supabase**, utilizing Realtime for P2P signaling and Storage for encrypted file hosting. With a focus on anonymity, security, and simplicity, Privosend provides a seamless alternative to traditional file sharing services, protecting user privacy by design.
